@@ -2,10 +2,21 @@ import { Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import bcrypt from 'bcryptjs';
 
+import { classToPlain } from 'class-transformer';
 import usersRepository from '../repositories/UsersRepository';
 import { generateToken } from '../../utils/generateToken';
 
 class UserController {
+  async index(request: Request, response: Response) {
+    const UsersRepository = getCustomRepository(usersRepository);
+
+    const users = await UsersRepository.find();
+
+    const formattedUsers = classToPlain(users);
+
+    response.status(200).json(formattedUsers);
+  }
+
   async store(request: Request, response: Response) {
     const UsersRepository = getCustomRepository(usersRepository);
     const {

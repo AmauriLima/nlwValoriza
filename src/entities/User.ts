@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column, CreateDateColumn, Entity, PrimaryColumn,
 } from 'typeorm';
@@ -17,6 +18,7 @@ export class User {
   @Column()
   admin: boolean;
 
+  @Exclude()
   @Column()
   password: string;
 

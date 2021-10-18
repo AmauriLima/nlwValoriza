@@ -10,12 +10,9 @@ class ComplimentController {
     const UsersRepository = getCustomRepository(usersRepository);
     const TagsRepository = getCustomRepository(tagsRepository);
 
-    const {
-      tag_id,
-      user_sender,
-      user_receiver,
-      message,
-    } = request.body;
+    const { tag_id, user_receiver, message } = request.body;
+
+    const { user_id: user_sender } = request;
 
     const tagExists = await TagsRepository.findOne({
       id: tag_id,
@@ -45,6 +42,35 @@ class ComplimentController {
     await ComplimentsRepository.save(compliment);
 
     response.status(201).json(compliment);
+  }
+
+  async indexReceiveCompliments(request: Request, response: Response) {
+    const ComplimentsRepository = getCustomRepository(complimentsRepository);
+    const { user_id } = request;
+
+    const compliments = await ComplimentsRepository.find({
+      where: {
+        user_receiver: user_id,
+      },
+      relations: [
+        'userSender', 'userReceiver', 'tag',
+      ],
+    });
+
+    response.status(200).json(compliments);
+  }
+
+  async indexSendCompliments(request: Request, response: Response) {
+    const ComplimentsRepository = getCustomRepository(complimentsRepository);
+    const { user_id } = request;
+
+    const compliments = await ComplimentsRepository.find({
+      where: {
+        user_sender: user_id,
+      },
+    });
+
+    response.status(200).json(compliments);
   }
 }
 

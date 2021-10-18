@@ -5,5 +5,6 @@ import ensureAdmin from '../middlewares/ensureAdmin';
 const tagRoutes = Router();
 
 tagRoutes.post('/', ensureAdmin, TagController.store);
+tagRoutes.get('/', TagController.index);
 
 export { tagRoutes };

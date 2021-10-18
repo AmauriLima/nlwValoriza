@@ -9,7 +9,7 @@ class UserController {
   async store(request: Request, response: Response) {
     const UsersRepository = getCustomRepository(usersRepository);
     const {
-      name, email, admin, password,
+      name, email, admin = false, password,
     } = request.body;
 
     if (!name || !email || !password) {
